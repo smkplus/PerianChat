@@ -1,15 +1,22 @@
-const express = require('express');
-const router = express.Router();
-const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
+var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+var port = process.env.PORT || 3000;
 
-// Welcome Page
-router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
+const publicPath = path.join(__dirname, '/index.html');
+app.use(express.static(publicPath));
 
-// Dashboard
-router.get('/dashboard', ensureAuthenticated, (req, res) =>
-  res.render('dashboard', {
-    user: req.user
-  })
-);
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/index.html');
+});
 
-module.exports = router;
+io.on('connection', function(socket){
+  socket.on('chat message', function(msg){
+    io.emit('chat message', msg);
+  });
+});
+
+http.listen(port, function(){
+  console.log('listening on *:' + port);
+});
+
