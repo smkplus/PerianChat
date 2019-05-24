@@ -1,34 +1,15 @@
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var port = process.env.PORT || 3000;
+const express = require('express');
+const router = express.Router();
+const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
-});
+// Welcome Page
+router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
 
-io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
-  });
-});
+// Dashboard
+router.get('/dashboard', ensureAuthenticated, (req, res) =>
+  res.render('dashboard', {
+    user: req.user
+  })
+);
 
-http.listen(port, function(){
-  console.log('listening on *:' + port);
-});
-
-var http=require('http');
-var url=require('url');
-
-var server=http.createServer(function(req,res){
-    var pathname=url.parse(req.url).pathname;
-    switch(pathname){
-        case '/subpage':
-            res.end('subpage');
-        break;
-        default:
-            res.end('default');
-        break;
-    }
-
-}).listen(8080);
+module.exports = router;
