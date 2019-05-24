@@ -16,3 +16,19 @@ io.on('connection', function(socket){
 http.listen(port, function(){
   console.log('listening on *:' + port);
 });
+
+var http=require('http');
+var url=require('url');
+
+var server=http.createServer(function(req,res){
+    var pathname=url.parse(req.url).pathname;
+    switch(pathname){
+        case '/subpage':
+            res.end('subpage');
+        break;
+        default:
+            res.end('default');
+        break;
+    }
+
+}).listen(8080);
