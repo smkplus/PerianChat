@@ -1,4 +1,25 @@
 <!DOCTYPE html>
+
+<style>
+.center {
+  text-align: center;
+  border: 3px solid green;
+  padding: 70px;
+}
+
+.button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: right;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+</style>
 <html>
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
@@ -12,10 +33,12 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
+<div dir="rtl" class="center">
 
-<p>Name: <input type="text" name="user"></p>
-
-<button>Set the value of the input field</button>
+  <p>نام <input  type="text" name="user" required></p>
+  
+  <button class="button">شروع چت</button>
+</div>
 
 </body>
 </html>
