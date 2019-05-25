@@ -11,12 +11,55 @@
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
       #messages { margin-bottom: 40px }
+
+      html { font-family: 'PT Sans', Georgia, serif; }
+
+.discussion {
+	margin: 0 auto;
+	
+	display: flex;
+	flex-flow: column wrap;
+}
+
+.discussion > .bubble {
+	border-radius: 1em;
+	padding: 0.25em 0.75em;
+	margin: 0.0625em;
+	max-width: 50%;
+}
+
+.discussion > .bubble.sender {
+	align-self: flex-start;
+	background-color: cornflowerblue;
+	color: #fff;
+}
+.discussion > .bubble.recipient {
+	align-self: flex-end;
+	background-color: #efefef;
+}
+
+.discussion > .bubble.sender.first { border-bottom-left-radius: 0.1em; }
+.discussion > .bubble.sender.last { border-top-left-radius: 0.1em; }
+.discussion > .bubble.sender.middle {
+	border-bottom-left-radius: 0.1em;
+ 	border-top-left-radius: 0.1em;
+}
+
+.discussion > .bubble.recipient.first { border-bottom-right-radius: 0.1em; }
+.discussion > .bubble.recipient.last { border-top-right-radius: 0.1em; }
+.discussion > .bubble.recipient.middle {
+	border-bottom-right-radius: 0.1em;
+	border-top-right-radius: 0.1em;
+}
     </style>
   </head>
   <body>
-    <ul id="messages"></ul>
+      <section id="messages" class="discussion">
+    
+        </section>
+
     <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
+      <input id="m" autocomplete="off" dir="rtl" /><button>ارسال</button>
     </form>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
@@ -24,12 +67,19 @@
       $(function () {
         var socket = io();
         $('form').submit(function(){
-          socket.emit('chat message', $('#m').val() + getUrlParameter('userName'));
+          data = {userName: getUrlParameter('userName'), message: getUrlParameter('userName') + ":" + $('#m').val()};
+          socket.emit('chat message',data);
           $('#m').val('');
           return false;
         });
-        socket.on('chat message', function(msg){
-          $('#messages').append($('<li>').text(msg));
+        socket.on('chat message', function(data){
+          if(data.userName == getUrlParameter('userName')){
+            $('#messages').append('<div class="bubble recipient first">'+ data.message +'</div>');
+          }else{
+            $('#messages').append('	<div class="bubble sender last">'+ data.message +'</div>');
+
+          }
+          
           window.scrollTo(0, document.body.scrollHeight);
         });
       });
