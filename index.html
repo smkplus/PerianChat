@@ -26,8 +26,12 @@
 <script>
 $(document).ready(function(){
   $("button").click(function(){
-   console.log($("input:text").val());
-   window.location.href = '../chat.html' + "?userName=" + $("input:text").val();
+   if($("input:text").val() != ""){
+     console.log($("input:text").val());
+     window.location.href = '../chat.html' + "?userName=" + $("input:text").val();
+    }else{
+      alert("لطفاً نام خود را وارد کنید");
+    }
   });
 });
 </script>
