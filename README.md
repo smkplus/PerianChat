@@ -1,4 +1,4 @@
-# chat-example
+# PersianChat
 
 https://persianchat.herokuapp.com
 
