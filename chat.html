@@ -1,96 +1,62 @@
-<!doctype html>
-<html>
-  <head>
-    <title>چت فارسی</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 25px Helvetica, Arial; }
-      form { padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input {  border: groove; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: #4CAF50; border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages { margin-bottom: 40px }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
 
-      html { font-family: 'PT Sans', Georgia, serif; }
-
-.discussion {
-	margin: 0 auto;
-	
-	display: flex;
-	flex-flow: column wrap;
+<style>
+#welcome{
+    color: red;
+    font-size: 50px;
+    font-weight: bold;
+    text-shadow: 0 0 20px blue;
+    text-align: center;
+}
+#messages{
+    text-align: center;
+}
+#sendbutton{
+border: none;
+background-color: green;
+color: white;
+cursor: pointer;
 }
 
-.discussion > .bubble {
-	border-radius: 1em;
-	padding: 0.25em 0.75em;
-	margin: 0.0625em;
-	max-width: 50%;
-}
+</style>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="/socket.io/socket.io.js"></script>
 
-.discussion > .bubble.sender {
-	align-self: flex-start;
-	background-color: #efefef;
-	color: black;
-}
-.discussion > .bubble.recipient {
-	align-self: flex-end;
-	background-color:  cornflowerblue;
-  color:  #fff;
-}
 
-.discussion > .bubble.sender.first { border-bottom-left-radius: 0.1em; }
-.discussion > .bubble.sender.last { border-top-left-radius: 0.1em; }
-.discussion > .bubble.sender.middle {
-	border-bottom-left-radius: 0.1em;
- 	border-top-left-radius: 0.1em;
-}
+<body>
+    <h1 id="welcome">DoryabChat</h1>
+    <p id="messages">
+    </p>
+    <input dir="rtl" id="Input" ><button id="sendbutton">ارسال</button>
 
-.discussion > .bubble.recipient.first { border-bottom-right-radius: 0.1em; }
-.discussion > .bubble.recipient.last { border-top-right-radius: 0.1em; }
-.discussion > .bubble.recipient.middle {
-	border-bottom-right-radius: 0.1em;
-	border-top-right-radius: 0.1em;
-}
-    </style>
-  </head>
-  <body>
-      <section id="messages" class="discussion">
-    
-        </section>
+<script>
+$(function(){
+    var socket = io();
 
-    <form action="">
-      <input id="m" autocomplete="off" dir="rtl" /><button>ارسال</button>
-    </form>
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <script>
-      $(function () {
-        var socket = io();
-        $('form').submit(function(){
-          data = {userName: getUrlParameter('userName'), message:$('#m').val()};
-          socket.emit('chat message',data);
-          $('#m').val('');
-          return false;
-        });
-        socket.on('chat message', function(data){
-          if(data.userName == getUrlParameter('userName')){
-            $('#messages').append('<div class="bubble recipient first">'+ data.message +'</div>');
-          }else{
-            $('#messages').append('	<div class="bubble sender last">'+ data.userName + ":" + data.message +'</div>');
 
-          }
-          
-          window.scrollTo(0, document.body.scrollHeight);
-        });
-      });
-      
-      function getUrlParameter(name) {
-    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-    var results = regex.exec(location.search);
-    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-};
-    </script>
-  </body>
+
+
+
+$("#sendbutton").click(function(){
+    socket.emit('chat message',$("#Input").val());
+
+});
+        socket.on('chat message', function(msg){
+            $("#messages").append(msg + "<br>");
+            var a = new Audio('https://raw.githubusercontent.com/telegramdesktop/tdesktop/12673ab6fea05198dd575a3ee89497cfdd76cfb8/Telegram/SourceFiles/art/newmsg.wav');
+            a.play();
+
+            $("#Input").val('');
+    });
+});
+</script>
+</body>
+
 </html>
