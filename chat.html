@@ -74,7 +74,6 @@
           return false;
         });
         socket.on('chat message', function(data){
-          $("#messages").append(msg + "<br>");
             var a = new Audio('https://raw.githubusercontent.com/telegramdesktop/tdesktop/12673ab6fea05198dd575a3ee89497cfdd76cfb8/Telegram/SourceFiles/art/newmsg.wav');
             a.play();
           if(data.userName == getUrlParameter('userName')){
