@@ -1,98 +1,165 @@
 <!doctype html>
 <html>
-  <head>
-    <title>چت فارسی</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 25px Helvetica, Arial; }
-      form { padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input {  border: groove; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: #4CAF50; border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages { margin-bottom: 40px }
 
-      html { font-family: 'PT Sans', Georgia, serif; }
+<head>
+  <title>چت فارسی</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-.discussion {
-	margin: 0 auto;
-	
-	display: flex;
-	flex-flow: column wrap;
-}
+    body {
+      font: 25px Helvetica, Arial;
+    }
 
-.discussion > .bubble {
-	border-radius: 1em;
-	padding: 0.25em 0.75em;
-	margin: 0.0625em;
-	max-width: 50%;
-}
+    form {
+      padding: 3px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
 
-.discussion > .bubble.sender {
-	align-self: flex-start;
-	background-color: #efefef;
-	color: black;
-}
-.discussion > .bubble.recipient {
-	align-self: flex-end;
-	background-color:  cornflowerblue;
-  color:  #fff;
-}
+    form input {
+      border: groove;
+      padding: 10px;
+      width: 90%;
+      margin-right: .5%;
+    }
 
-.discussion > .bubble.sender.first { border-bottom-left-radius: 0.1em; }
-.discussion > .bubble.sender.last { border-top-left-radius: 0.1em; }
-.discussion > .bubble.sender.middle {
-	border-bottom-left-radius: 0.1em;
- 	border-top-left-radius: 0.1em;
-}
+    form button {
+      cursor: pointer;
+      width: 9%;
+      background: #4CAF50;
+      border: none;
+      padding: 10px;
+    }
 
-.discussion > .bubble.recipient.first { border-bottom-right-radius: 0.1em; }
-.discussion > .bubble.recipient.last { border-top-right-radius: 0.1em; }
-.discussion > .bubble.recipient.middle {
-	border-bottom-right-radius: 0.1em;
-	border-top-right-radius: 0.1em;
-}
-    </style>
-  </head>
-  <body>
-      <section id="messages" class="discussion">
-    
-        </section>
+    #messages {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
 
-    <form action="">
-      <input id="m" autocomplete="off" dir="rtl" /><button>ارسال</button>
-    </form>
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <script>
-      $(function () {
-        var socket = io();
-        $('form').submit(function(){
-          data = {userName: getUrlParameter('userName'), message:$('#m').val()};
-          socket.emit('chat message',data);
-          $('#m').val('');
-          return false;
-        });
-        socket.on('chat message', function(data){
-            var a = new Audio('https://raw.githubusercontent.com/telegramdesktop/tdesktop/12673ab6fea05198dd575a3ee89497cfdd76cfb8/Telegram/SourceFiles/art/newmsg.wav');
-            a.play();
-          if(data.userName == getUrlParameter('userName')){
-            $('#messages').append('<div class="bubble recipient first">'+ data.message +'</div>');
-          }else{
-            $('#messages').append('	<div class="bubble sender last">'+ data.userName + ":" + data.message +'</div>');
+    #messages li {
+      padding: 5px 10px;
+    }
 
-          }
-          
-          window.scrollTo(0, document.body.scrollHeight);
-        });
+    #messages {
+      margin-bottom: 40px
+    }
+
+    html {
+      font-family: 'PT Sans', Georgia, serif;
+    }
+
+    .discussion {
+      margin: 0 auto;
+
+      display: flex;
+      flex-flow: column wrap;
+    }
+
+    .discussion>.bubble {
+      border-radius: 1em;
+      padding: 0.25em 0.75em;
+      margin: 0.0625em;
+      max-width: 50%;
+    }
+
+    .discussion>.bubble.sender {
+      align-self: flex-start;
+      background-color: #efefef;
+      color: black;
+    }
+
+    .discussion>.bubble.recipient {
+      align-self: flex-end;
+      background-color: cornflowerblue;
+      color: #fff;
+    }
+
+    .discussion>.bubble.sender.first {
+      border-bottom-left-radius: 0.1em;
+    }
+
+    .discussion>.bubble.sender.last {
+      border-top-left-radius: 0.1em;
+    }
+
+    .discussion>.bubble.sender.middle {
+      border-bottom-left-radius: 0.1em;
+      border-top-left-radius: 0.1em;
+    }
+
+    .discussion>.bubble.recipient.first {
+      border-bottom-right-radius: 0.1em;
+    }
+
+    .discussion>.bubble.recipient.last {
+      border-top-right-radius: 0.1em;
+    }
+
+    .discussion>.bubble.recipient.middle {
+      border-bottom-right-radius: 0.1em;
+      border-top-right-radius: 0.1em;
+    }
+  </style>
+</head>
+
+<body>
+  <section id="messages" class="discussion">
+
+  </section>
+
+  <form action="">
+    <input id="m" autocomplete="off" dir="rtl" /><button>ارسال</button>
+  </form>
+  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script>
+    $(function () {
+      var socket = io();
+      $('form').submit(function () {
+        data = { userName: getUrlParameter('userName'), message: $('#m').val() };
+        socket.emit('chat message', data);
+        $('#m').val('');
+        return false;
       });
-      
-      function getUrlParameter(name) {
-    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-    var results = regex.exec(location.search);
-    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-};
-    </script>
-  </body>
+      socket.on('chat message', function (data) {
+        // var a = new Audio('https://raw.githubusercontent.com/telegramdesktop/tdesktop/12673ab6fea05198dd575a3ee89497cfdd76cfb8/Telegram/SourceFiles/art/newmsg.wav');
+        // a.play();
+        if (data.userName == getUrlParameter('userName')) {
+          $('#messages').append('<div class="bubble recipient first">' + data.message + '</div>');
+        } else {
+          $('#messages').append('	<div class="bubble sender last">' + data.userName + ":" + data.message + '</div>');
+        }
+
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+      socket.on('Init', function () {
+        $("#messages").text('');
+        console.log("Test");
+      });
+      socket.on('Test', function (data) {
+        console.log(data._id);
+        if (data.name == getUrlParameter('userName')) {
+          $('#messages').append('<div class="bubble recipient first">' + data.message + '</div>');
+        } else {
+          $('#messages').append('	<div class="bubble sender last">' + data.name + ":" + data.message + '</div>');
+        }
+      });
+    });
+
+
+    function getUrlParameter(name) {
+      name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+      var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+      var results = regex.exec(location.search);
+      return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    };
+  </script>
+</body>
+
 </html>
