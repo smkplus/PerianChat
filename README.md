@@ -1,5 +1,5 @@
-# PersianChat
+# chat-example
 
-https://persianchat.herokuapp.com
-
-![چت فارسی](https://user-images.githubusercontent.com/16706911/58493073-6feecd80-8187-11e9-8b34-47aafe22a2cb.png)
+This is the source code for a very simple chat example used for
+the [Getting Started](http://socket.io/get-started/chat/) guide
+of the Socket.IO website.
