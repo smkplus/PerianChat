@@ -7,7 +7,7 @@ const mongo = require('mongodb').MongoClient;
 const dbName = 'chat';
 
 // mongodb+srv://smkplus3d:!qazxsw2@cluster0-rporp.mongodb.net/test?retryWrites=true
-mongo.connect('MONGODB',{ useNewUrlParser: true }, function(err, client){
+mongo.connect('mongodb://localhost:27017',{ useNewUrlParser: true }, function(err, client){
   if(err){
     throw err;
   }
